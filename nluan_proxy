@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kích Hoạt Tài Khoản</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; width: 320px; }
+        input { width: 100%; padding: 10px; margin: 15px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #0056b3; }
+        #message { margin-top: 15px; font-weight: bold; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Nhập Mã Kích Hoạt</h2>
+    <input type="text" id="licenseKey" placeholder="Ví dụ: KEY-12345-ABCDE">
+    <button onclick="checkKey()">KÍCH HOẠT</button>
+    <div id="message"></div>
+</div>
+
+<script>
+    async function checkKey() {
+        const inputKey = document.getElementById('licenseKey').value;
+        const messageDiv = document.getElementById('message');
+        messageDiv.innerHTML = "Đang kiểm tra...";
+
+        try {
+            // Gửi key lên máy chủ NodeJS (chạy ở cổng 3000)
+            const response = await fetch('http://localhost:3000/api/activate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ key: inputKey })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                messageDiv.className = "success";
+                messageDiv.innerHTML = `${data.message} <br> Hạn dùng: ${data.config.expiry}`;
+            } else {
+                messageDiv.className = "error";
+                messageDiv.innerHTML = data.message;
+            }
+        } catch (error) {
+            messageDiv.className = "error";
+            messageDiv.innerHTML = "Không thể kết nối đến máy chủ!";
+        }
+    }
+</script>
+
+</body>
+</html>
