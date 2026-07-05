@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxy Config</title>
+    <script src="https://telegram.org"></script>
+    <style>
+        body {
+            background-color: #1c1c1e;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: #2c2c2e;
+            padding: 20px;
+            border-radius: 12px;
+            box-sizing: border-box;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        h2 {
+            margin-top: 0;
+            font-size: 20px;
+            text-align: center;
+            color: #0a84ff;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #aeaeaaaa;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            background: #3a3a3c;
+            border: 1px solid #48484a;
+            border-radius: 8px;
+            color: white;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        input:focus {
+            border-color: #0a84ff;
+            outline: none;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #34c759;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn:active {
+            background: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>CẤY PROXY TỰ ĐỘNG</h2>
+        <div class="input-group">
+            <label>Địa chỉ IP / Host</label>
+            <input type="text" id="host" placeholder="Ví dụ: 123.45.67.89">
+        </div>
+        <div class="input-group">
+            <label>Cổng (Port)</label>
+            <input type="number" id="port" placeholder="Ví dụ: 8080">
+        </div>
+        <div class="input-group">
+            <label>Tài khoản (Tùy chọn)</label>
+            <input type="text" id="user" placeholder="Nhập username">
+        </div>
+        <div class="input-group">
+            <label>Mật khẩu (Tùy chọn)</label>
+            <input type="password" id="pass" placeholder="Nhập password">
+        </div>
+        <button class="btn" onclick="sendData()">ÁP DỤNG PROXY</button>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        function sendData() {
+            const host = document.getElementById('host').value;
+            const port = document.getElementById('port').value;
+            
+            if(!host || !port) {
+                alert('Vui lòng nhập đầy đủ IP và Port!');
+                return;
+            }
+            
+            const data = JSON.stringify({ host: host, port: port });
+            tg.sendData(data); 
+            tg.close();
+        }
+    </script>
+</body>
+</html>
